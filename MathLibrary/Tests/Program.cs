@@ -5,6 +5,7 @@
         static void Main(string[] args)
         {
             SimplePrimeFinderTests.Test();
+            MathHelperTests.Test();
         }
     }
 }
