@@ -1,15 +1,10 @@
-﻿using System;
-
-using MathLib;
-
-
-namespace Tests
+﻿namespace Tests
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            SimplePrimeFinderTests.Test();
         }
     }
 }
