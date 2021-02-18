@@ -28,6 +28,14 @@ namespace Tests
             int[] generatedPrimes_2 = SimplePrimeFinder.GetPrimesUntil(7);
             if (!arePrimeArraysEqual(expectedPrimes_2, generatedPrimes_2))
                 Console.Out.WriteLine("[SimplePrimeFinderTests] Test 2 failed.");
+
+            int[] expectedPrimes_3 = new int[] { 2, 3, 5, 7, 11, 13, 17, 19 };
+            for (int i = 0; i < expectedPrimes_3.Length; i++)
+                if (SimplePrimeFinder.GetPrimeWithIndex(i) != expectedPrimes_3[i])
+                {
+                    Console.Out.WriteLine("[SimplePrimeFinderTests] Test 3 failed.");
+                    break;
+                }
         }
 
         /// <summary>

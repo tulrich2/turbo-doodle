@@ -38,6 +38,20 @@ namespace MathLib
             // Rückgabe der Liste mit den gefundenen Primzahlen, allerdings wird diese zuvor in ein Array umgewandelt.
             return returnPrimes.ToArray();
         }
+        /// <summary>
+        /// Diese Funktion liefert eine Primzahl mit dem angegebenen Index zurück.
+        /// </summary>
+        /// <param name="index">Der Index der Primzahl die gewollt ist.</param>
+        /// <returns>Die Primzahl mit Index "index".</returns>
+        public static int GetPrimeWithIndex(int index)
+        {
+            // Berechne alle Primzahlen bis zum angegebenen Index (falls nötig).
+            while (primes.Count < index + 1)
+                findNextPrime();
+
+            // Gib die gewollte Primzahl zurück.
+            return primes[index];
+        }
 
         /// <summary>
         /// Diese private Funktion findet die nächste Primzahl die auf die zuletzt generierte folgt.
