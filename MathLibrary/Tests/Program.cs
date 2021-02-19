@@ -6,6 +6,7 @@
         {
             SimplePrimeFinderTests.Test();
             MathHelperTests.Test();
+            MyFractionTests.Test();
         }
     }
 }
