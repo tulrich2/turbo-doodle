@@ -3,14 +3,36 @@
 
 namespace MathLib
 {
+    /// <summary>
+    /// Eine Klasse zur Darstellung von Matrizen.
+    /// </summary>
     public class MyMatrix
     {
+        /// <summary>
+        /// Indexer zum Abrufen einzelner Elemente einer Matrix.
+        /// </summary>
+        /// <param name="lineindex">Der Index der Zeile, in der sich das gewünschte Element befindet.</param>
+        /// <param name="columnindex">Der Index der Spalte, in der sich das gewünschte Element befindet.</param>
+        /// <returns>Das gwünschte Element.</returns>
         public MyFraction this[int lineindex, int columnindex] { get { return values[lineindex, columnindex]; } }
+        /// <summary>
+        /// Gibt die Anzahl Zeilen dieser Matrix an.
+        /// </summary>
         public int Lines { get { return values.GetLength(0); } }
+        /// <summary>
+        /// Gibt die Anzahl Spalten dieser Matrix an.
+        /// </summary>
         public int Columns { get { return values.GetLength(1); } }
 
+        /// <summary>
+        /// Privates Array zum speichern der einzelnen Elemente der Matrix.
+        /// </summary>
         private MyFraction[,] values;
 
+        /// <summary>
+        /// Erstellt eine neue Matrix-Instanz mit den angegebenen Elementen.
+        /// </summary>
+        /// <param name="newvalues">Die Elemente der neuen Instanz.</param>
         public MyMatrix(MyFraction[,] newvalues)
         {
             if (newvalues.GetLength(0) == 0 || newvalues.GetLength(1) == 0)
@@ -18,21 +40,33 @@ namespace MathLib
 
             values = newvalues;
         }
+        /// <summary>
+        /// Damit keine leeren Instanzen erstellt werden können, also Matrizen ohne Elemente, wurde der Parameterlose Konstruktor privat gemacht. Er wird nicht verwendet.
+        /// </summary>
         private MyMatrix()
         {
             values = new MyFraction[0, 0];
         }
 
+        /// <summary>
+        /// Gibt die Transponierte Matrix zu dieser Instanz zurück.
+        /// </summary>
+        /// <returns>Die Transponierte Matrix.</returns>
         public MyMatrix Transpose()
         {
             MyFraction[,] newvalues = new MyFraction[Columns, Lines];
 
             for (int lineIndex = 0; lineIndex < Lines; lineIndex++)
                 for (int columnIndex = 0; columnIndex < Columns; columnIndex++)
+                    // Die Matrix ist deswegen am Ende transponiert, da in dieser Zuweisung die Indizes für Zeile und Spalte genau vertauscht sind.
                     newvalues[columnIndex, lineIndex] = values[lineIndex, columnIndex];
 
             return new MyMatrix(newvalues);
         }
+        /// <summary>
+        /// Gibt die Determinante dieser Instanz zurück.
+        /// </summary>
+        /// <returns>Die Determinante.</returns>
         public MyFraction Determinant()
         {
             if (Lines != Columns)
@@ -66,6 +100,7 @@ namespace MathLib
             return false;
         }
 
+        // Die Arithmetischen Operatoren folgen den Rechenregeln für Matrizen, es wird zu Beginn jedoch jeweils auf die korrekten Dimensionen der Operanden überprüft.
         public static MyMatrix operator -(MyMatrix op)
         {
             MyFraction[,] newvalues = new MyFraction[op.Lines, op.Columns];
@@ -120,8 +155,14 @@ namespace MathLib
             return new MyMatrix(newvalues);
         }
 
+        /// <summary>
+        /// Private, statische und rekursive Funktion zur Berechnung der Determinante einer Matrix.
+        /// </summary>
+        /// <param name="matrix">Die Matrix von der die Determinante berechnet werden soll.</param>
+        /// <returns>Die Determinante.</returns>
         private static MyFraction determinantRec(MyMatrix matrix)
         {
+            // Bis zur Größe 3 können wir direkt das Ergebnis für die Determinante berechnen, ohne diese Funktion rekursiv aufrufen zu müssen.
             if (matrix.Lines == 1)
                 return matrix.values[0, 0];
             else if (matrix.Lines == 2)
@@ -131,6 +172,8 @@ namespace MathLib
                      - (matrix.values[0, 2] * matrix.values[1, 1] * matrix.values[2, 0]) - (matrix.values[0, 1] * matrix.values[1, 0] * matrix.values[2, 2]) - (matrix.values[0, 0] * matrix.values[1, 2] * matrix.values[2, 1]);
             else
             {
+                // In diesem Teil wird einfach der Laplace Algorithmus zur Berechnung der Determinante angewandt.
+
                 MyFraction returnvalue = 0;
                 MyFraction factor = 1;
                 for (int i = 0; i < matrix.Lines; i++)
