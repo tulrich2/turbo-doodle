@@ -13,11 +13,32 @@ namespace MathLib
 
         public MyMatrix(MyFraction[,] newvalues)
         {
+            if (newvalues.GetLength(0) == 0 || newvalues.GetLength(1) == 0)
+                throw new ArithmeticException("Es kann keine leere Matrix erzeugt werden.");
+
             values = newvalues;
         }
         private MyMatrix()
         {
             values = new MyFraction[0, 0];
+        }
+
+        public MyMatrix Transpose()
+        {
+            MyFraction[,] newvalues = new MyFraction[Columns, Lines];
+
+            for (int lineIndex = 0; lineIndex < Lines; lineIndex++)
+                for (int columnIndex = 0; columnIndex < Columns; columnIndex++)
+                    newvalues[columnIndex, lineIndex] = values[lineIndex, columnIndex];
+
+            return new MyMatrix(newvalues);
+        }
+        public MyFraction Determinant()
+        {
+            if (Lines != Columns)
+                throw new ArithmeticException("Es kann nur von quadratischen Matrizen die Determinante gebildet werden.");
+
+            return determinantRec(this);
         }
 
         public static bool operator ==(MyMatrix op1, MyMatrix op2)
@@ -97,6 +118,43 @@ namespace MathLib
                 }
 
             return new MyMatrix(newvalues);
+        }
+
+        private static MyFraction determinantRec(MyMatrix matrix)
+        {
+            if (matrix.Lines == 1)
+                return matrix.values[0, 0];
+            else if (matrix.Lines == 2)
+                return (matrix.values[0, 0] * matrix.values[1, 1]) - (matrix.values[0, 1] * matrix.values[1, 0]);
+            else if (matrix.Lines == 3)
+                return (matrix.values[0, 0] * matrix.values[1, 1] * matrix.values[2, 2]) + (matrix.values[0, 1] * matrix.values[1, 2] * matrix.values[2, 0]) + (matrix.values[0, 2] * matrix.values[1, 0] * matrix.values[2, 1])
+                     - (matrix.values[0, 2] * matrix.values[1, 1] * matrix.values[2, 0]) - (matrix.values[0, 1] * matrix.values[1, 0] * matrix.values[2, 2]) - (matrix.values[0, 0] * matrix.values[1, 2] * matrix.values[2, 1]);
+            else
+            {
+                MyFraction returnvalue = 0;
+                MyFraction factor = 1;
+                for (int i = 0; i < matrix.Lines; i++)
+                {
+                    MyFraction[,] tmpValues = new MyFraction[matrix.Lines - 1, matrix.Lines - 1];
+                    int tmpColumnIndex = 0;
+                    for (int columnIndex = 0; columnIndex < matrix.Columns; columnIndex++)
+                    {
+                        if (columnIndex == i)
+                            continue;
+
+                        for (int lineIndex = 1; lineIndex < matrix.Lines; lineIndex++)
+                            tmpValues[lineIndex - 1, tmpColumnIndex] = matrix.values[lineIndex, columnIndex];
+
+                        tmpColumnIndex++;
+                    }
+
+                    returnvalue += factor * matrix.values[0, i] * determinantRec(new MyMatrix(tmpValues));
+
+                    factor = -factor;
+                }
+
+                return returnvalue;
+            }
         }
     }
 }
