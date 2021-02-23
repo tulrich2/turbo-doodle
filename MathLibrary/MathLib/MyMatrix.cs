@@ -154,6 +154,22 @@ namespace MathLib
 
             return new MyMatrix(newvalues);
         }
+        public static MyVector operator *(MyMatrix op1, MyVector op2)
+        {
+            if (op1.Columns != op2.ElementCount)
+                throw new ArithmeticException("Der Vektor muss so viele Zeilen haben wie die Matrix Spalten hat.");
+
+            MyFraction[] newvalues = new MyFraction[op1.Lines];
+
+            for (int lineIndex = 0; lineIndex < op1.Lines; lineIndex++)
+            {
+                newvalues[lineIndex] = 0;
+                for (int columnIndex = 0; columnIndex < op1.Columns; columnIndex++)
+                    newvalues[lineIndex] += op1[lineIndex, columnIndex] * op2[columnIndex];
+            }
+
+            return new MyVector(newvalues);
+        }
 
         /// <summary>
         /// Private, statische und rekursive Funktion zur Berechnung der Determinante einer Matrix.
