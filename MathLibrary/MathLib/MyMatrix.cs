@@ -48,6 +48,72 @@ namespace MathLib
             values = new MyFraction[0, 0];
         }
 
+        public override string ToString()
+        {
+            string matrixString = "";
+
+            int[] columnWidths = new int[Columns];
+            for (int columnIndex = 0; columnIndex < Columns; columnIndex++)
+            {
+                columnWidths[columnIndex] = 0;
+                for (int lineIndex = 0; lineIndex < Lines; lineIndex++)
+                {
+                    int currentElementWidth = values[lineIndex, columnIndex].ToString().Length;
+                    if (currentElementWidth > columnWidths[columnIndex])
+                        columnWidths[columnIndex] = currentElementWidth;
+                }
+            }
+
+            if (Lines == 1)
+            {
+                matrixString = "[ ";
+                for (int columnIndex = 0; columnIndex < Columns; columnIndex++)
+                {
+                    matrixString += values[0, columnIndex].ToString();
+                    if (columnIndex < Columns - 1)
+                        matrixString += "  ";
+                }
+                matrixString += " ]";
+            }
+            else
+            {
+                matrixString += "┌ ";
+                for (int columnIndex = 0; columnIndex < Columns; columnIndex++)
+                {
+                    string currentElementString = values[0, columnIndex].ToString();
+                    matrixString += new string(' ', columnWidths[columnIndex] - currentElementString.Length) + currentElementString;
+                    if (columnIndex < Columns - 1)
+                        matrixString += "  ";
+                }
+                matrixString += " ┐\n";
+
+                for (int lineIndex = 1; lineIndex < Lines - 1; lineIndex++)
+                {
+                    matrixString += "│ ";
+                    for (int columnIndex = 0; columnIndex < Columns; columnIndex++)
+                    {
+                        string currentElementString = values[lineIndex, columnIndex].ToString();
+                        matrixString += new string(' ', columnWidths[columnIndex] - currentElementString.Length) + currentElementString;
+                        if (columnIndex < Columns - 1)
+                            matrixString += "  ";
+                    }
+                    matrixString += " │\n";
+                }
+
+                matrixString += "└ ";
+                for (int columnIndex = 0; columnIndex < Columns; columnIndex++)
+                {
+                    string currentElementString = values[Lines - 1, columnIndex].ToString();
+                    matrixString += new string(' ', columnWidths[columnIndex] - currentElementString.Length) + currentElementString;
+                    if (columnIndex < Columns - 1)
+                        matrixString += "  ";
+                }
+                matrixString += " ┘";
+            }
+
+            return matrixString;
+        }
+
         /// <summary>
         /// Gibt die Transponierte Matrix zu dieser Instanz zurück.
         /// </summary>
@@ -153,6 +219,20 @@ namespace MathLib
                 }
 
             return new MyMatrix(newvalues);
+        }
+        public static MyMatrix operator *(MyFraction op1, MyMatrix op2)
+        {
+            MyFraction[,] newvalues = new MyFraction[op2.Lines, op2.Columns];
+
+            for (int lineIndex = 0; lineIndex < op2.Lines; lineIndex++)
+                for (int columnIndex = 0; columnIndex < op2.Columns; columnIndex++)
+                    newvalues[lineIndex, columnIndex] = op1 * op2[lineIndex, columnIndex];
+
+            return new MyMatrix(newvalues);
+        }
+        public static MyMatrix operator *(MyMatrix op1, MyFraction op2)
+        {
+            return op2 * op1;
         }
         public static MyVector operator *(MyMatrix op1, MyVector op2)
         {
