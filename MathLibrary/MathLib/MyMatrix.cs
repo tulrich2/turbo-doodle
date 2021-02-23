@@ -220,6 +220,20 @@ namespace MathLib
 
             return new MyMatrix(newvalues);
         }
+        public static MyMatrix operator *(MyFraction op1, MyMatrix op2)
+        {
+            MyFraction[,] newvalues = new MyFraction[op2.Lines, op2.Columns];
+
+            for (int lineIndex = 0; lineIndex < op2.Lines; lineIndex++)
+                for (int columnIndex = 0; columnIndex < op2.Columns; columnIndex++)
+                    newvalues[lineIndex, columnIndex] = op1 * op2[lineIndex, columnIndex];
+
+            return new MyMatrix(newvalues);
+        }
+        public static MyMatrix operator *(MyMatrix op1, MyFraction op2)
+        {
+            return op2 * op1;
+        }
 
         /// <summary>
         /// Private, statische und rekursive Funktion zur Berechnung der Determinante einer Matrix.
