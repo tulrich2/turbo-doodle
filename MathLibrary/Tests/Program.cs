@@ -8,6 +8,7 @@
             MathHelperTests.Test();
             MyFractionTests.Test();
             MyMatrixTests.Test();
+            SolverTests.Test();
         }
     }
 }
