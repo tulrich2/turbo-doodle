@@ -128,6 +128,7 @@ namespace MathLib
             MyFraction returnvalue = new MyFraction();
             returnvalue.Numerator = (int)((op1.Numerator * (denominatorLCM / op1.Denominator)) + (op2.Numerator * (denominatorLCM / op2.Denominator)));
             returnvalue.Denominator = (uint)denominatorLCM;
+            returnvalue.format();
             return returnvalue;
         }
         public static MyFraction operator -(MyFraction op1, MyFraction op2)
@@ -136,6 +137,7 @@ namespace MathLib
             MyFraction returnvalue = new MyFraction();
             returnvalue.Numerator = (int)((op1.Numerator * (denominatorLCM / op1.Denominator)) - (op2.Numerator * (denominatorLCM / op2.Denominator)));
             returnvalue.Denominator = (uint)denominatorLCM;
+            returnvalue.format();
             return returnvalue;
         }
         // Die Multiplikation zwerier Brüche gestaltet sich einfach, man muss lediglich die beiden Zähler miteinander multiplizieren für den Zähler der neuen
