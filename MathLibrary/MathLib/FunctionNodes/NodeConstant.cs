@@ -43,6 +43,10 @@ namespace MathLib
         {
             return this;
         }
+        public IFunctionNode Differentiate()
+        {
+            return new NodeConstant(0);
+        }
 
         public static bool operator ==(NodeConstant op1, NodeConstant op2)
         {

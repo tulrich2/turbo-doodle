@@ -98,6 +98,10 @@ namespace MathLib
 
             return this;
         }
+        public IFunctionNode Differentiate()
+        {
+            return new NodeAddition(LeftOperandNode.Differentiate(), RightOperandNode.Differentiate());
+        }
 
         public static bool operator ==(NodeAddition op1, NodeAddition op2)
         {

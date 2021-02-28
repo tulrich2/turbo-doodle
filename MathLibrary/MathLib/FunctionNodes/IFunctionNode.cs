@@ -9,5 +9,6 @@ namespace MathLib
         public double GetValueFloat(double x, Dictionary<string, double> parameter);
         public bool IsFractionFunction();
         public IFunctionNode Minimize();
+        public IFunctionNode Differentiate();
     }
 }

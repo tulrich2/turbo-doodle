@@ -35,6 +35,10 @@ namespace MathLib
 
             return this;
         }
+        public IFunctionNode Differentiate()
+        {
+            return new MyFunction(RootNode.Differentiate().Minimize());
+        }
 
         public MyFraction Integrate(MyFraction from, MyFraction to, int samples, Dictionary<string, MyFraction> parameter)
         {

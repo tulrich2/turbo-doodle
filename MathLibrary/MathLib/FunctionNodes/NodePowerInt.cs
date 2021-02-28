@@ -89,6 +89,10 @@ namespace MathLib
 
             return this;
         }
+        public IFunctionNode Differentiate()
+        {
+            return new NodeMultiplication(new NodeMultiplication(Exponent, new NodePowerInt(Base, new NodeSubtraction(Exponent, new NodeConstant(1)))), Base.Differentiate());
+        }
 
         public static bool operator ==(NodePowerInt op1, NodePowerInt op2)
         {
