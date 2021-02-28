@@ -18,6 +18,13 @@ namespace MathLib
         {
             return "(" + LeftOperandNode.ToString() + " / " + RightOperandNode.ToString() + ")";
         }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == typeof(NodeDivision))
+                return this == ((NodeDivision)obj);
+
+            return false;
+        }
 
         public MyFraction GetValue(MyFraction x, Dictionary<string, MyFraction> parameter)
         {
@@ -30,6 +37,30 @@ namespace MathLib
         public bool IsFractionFunction()
         {
             return LeftOperandNode.IsFractionFunction() && RightOperandNode.IsFractionFunction();
+        }
+        public IFunctionNode Minimize()
+        {
+            LeftOperandNode = LeftOperandNode.Minimize();
+            RightOperandNode = RightOperandNode.Minimize();
+
+            if (LeftOperandNode is NodeConstant && RightOperandNode is NodeConstant)
+                return new NodeConstant(((NodeConstant)LeftOperandNode).ConstantValue / ((NodeConstant)RightOperandNode).ConstantValue);
+            else if (LeftOperandNode is NodeConstant)
+            {
+                if (((NodeConstant)LeftOperandNode).ConstantValue == 0)
+                    return new NodeConstant(0);
+            }
+
+            return this;
+        }
+
+        public static bool operator ==(NodeDivision op1, NodeDivision op2)
+        {
+            return op1.LeftOperandNode.Equals(op2.LeftOperandNode) && op1.RightOperandNode.Equals(op2.RightOperandNode);
+        }
+        public static bool operator !=(NodeDivision op1, NodeDivision op2)
+        {
+            return !op1.LeftOperandNode.Equals(op2.LeftOperandNode) || !op1.RightOperandNode.Equals(op2.RightOperandNode);
         }
     }
 }

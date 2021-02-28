@@ -19,6 +19,13 @@ namespace MathLib
         {
             return "(" + Base.ToString() + " ^ " + Exponent.ToString() + ")";
         }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == typeof(NodePowerInt))
+                return this == ((NodePowerInt)obj);
+
+            return false;
+        }
 
         public MyFraction GetValue(MyFraction x, Dictionary<string, MyFraction> parameter)
         {
@@ -53,6 +60,43 @@ namespace MathLib
         public bool IsFractionFunction()
         {
             return Base.IsFractionFunction() && Exponent.IsFractionFunction();
+        }
+        public IFunctionNode Minimize()
+        {
+            Base = Base.Minimize();
+            Exponent = Exponent.Minimize();
+
+            if (Exponent is NodeConstant)
+            {
+                NodeConstant constExponent = (NodeConstant)Exponent;
+                if (constExponent.ConstantValue == 0)
+                    return new NodeConstant(1);
+                else if (constExponent.ConstantValue == 1)
+                    return Base.Minimize();
+                else if (Base is NodeConstant)
+                {
+                    if (constExponent.ConstantValue.Denominator != 1 || constExponent.ConstantValue.Numerator < 0)
+                        throw new ArithmeticException("Nur nicht-negative ganzzahlige Exponenten erlaubt.");
+
+                    NodeConstant constBase = (NodeConstant)Base;
+                    MyFraction returnValue = 1;
+                    for (int i = 0; i < constExponent.ConstantValue.Numerator; i++)
+                        returnValue *= constBase.ConstantValue;
+
+                    return new NodeConstant(returnValue);
+                }
+            }
+
+            return this;
+        }
+
+        public static bool operator ==(NodePowerInt op1, NodePowerInt op2)
+        {
+            return op1.Base.Equals(op2.Base) && op1.Exponent.Equals(op2.Exponent);
+        }
+        public static bool operator !=(NodePowerInt op1, NodePowerInt op2)
+        {
+            return !op1.Base.Equals(op2.Base) || !op1.Exponent.Equals(op2.Exponent);
         }
     }
 }

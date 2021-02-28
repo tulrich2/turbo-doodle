@@ -19,6 +19,13 @@ namespace MathLib
                 constantString = "(" + constantString + ")";
             return constantString;
         }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == typeof(NodeConstant))
+                return this == ((NodeConstant)obj);
+
+            return false;
+        }
 
         public MyFraction GetValue(MyFraction x, Dictionary<string, MyFraction> parameter)
         {
@@ -31,6 +38,19 @@ namespace MathLib
         public bool IsFractionFunction()
         {
             return true;
+        }
+        public IFunctionNode Minimize()
+        {
+            return this;
+        }
+
+        public static bool operator ==(NodeConstant op1, NodeConstant op2)
+        {
+            return op1.ConstantValue == op2.ConstantValue;
+        }
+        public static bool operator !=(NodeConstant op1, NodeConstant op2)
+        {
+            return op1.ConstantValue != op2.ConstantValue;
         }
     }
 }

@@ -17,6 +17,13 @@ namespace MathLib
         {
             return ParameterName;
         }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == typeof(NodeParameter))
+                return this == ((NodeParameter)obj);
+
+            return false;
+        }
 
         public MyFraction GetValue(MyFraction x, Dictionary<string, MyFraction> parameter)
         {
@@ -35,6 +42,19 @@ namespace MathLib
         public bool IsFractionFunction()
         {
             return true;
+        }
+        public IFunctionNode Minimize()
+        {
+            return this;
+        }
+
+        public static bool operator ==(NodeParameter op1, NodeParameter op2)
+        {
+            return op1.ParameterName == op2.ParameterName;
+        }
+        public static bool operator !=(NodeParameter op1, NodeParameter op2)
+        {
+            return op1.ParameterName != op2.ParameterName;
         }
     }
 }

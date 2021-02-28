@@ -29,6 +29,12 @@ namespace MathLib
         {
             return RootNode.IsFractionFunction();
         }
+        public IFunctionNode Minimize()
+        {
+            RootNode = RootNode.Minimize();
+
+            return this;
+        }
 
         public MyFraction Integrate(MyFraction from, MyFraction to, int samples, Dictionary<string, MyFraction> parameter)
         {
